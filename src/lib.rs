@@ -65,7 +65,7 @@ impl ArenaConfig {
             .relays(self.relays.clone())
             .room_expiry(self.room_expiry)
             .max_players(self.max_players)
-            .start_mode(self.start_mode.clone())
+            .start_mode(self.start_mode)
             .countdown_seconds(self.countdown_seconds);
 
         if let Some(ref url) = self.base_url {

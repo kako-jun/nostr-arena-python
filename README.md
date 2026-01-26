@@ -74,6 +74,7 @@ ArenaConfig(
 | `create()` | Create a room, returns URL |
 | `join(room_id)` | Join a room |
 | `leave()` | Leave current room |
+| `reconnect(room_id)` | Reconnect to a room (e.g., after restart) |
 | `delete_room()` | Delete room (host only) |
 | `send_state(state)` | Send game state (any dict) |
 | `send_game_over(reason, final_score)` | Send game over |

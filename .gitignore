@@ -1,0 +1,11 @@
+/target
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+*.so
+*.dll
+*.dylib
+.mcp.json

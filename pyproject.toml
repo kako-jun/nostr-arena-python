@@ -1,0 +1,36 @@
+[build-system]
+requires = ["maturin>=1.4,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "nostr-arena"
+version = "0.2.0"
+description = "Nostr-based real-time multiplayer game arena"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "kako-jun", email = "ppdg85ae99aaq2q2@gmail.com" }]
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Rust",
+    "Topic :: Games/Entertainment",
+]
+keywords = ["nostr", "multiplayer", "game", "arena", "p2p"]
+
+[project.urls]
+Homepage = "https://github.com/kako-jun/nostr-arena-python"
+Repository = "https://github.com/kako-jun/nostr-arena-python"
+Documentation = "https://github.com/kako-jun/nostr-arena"
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+python-source = "python"
+module-name = "nostr_arena._nostr_arena"

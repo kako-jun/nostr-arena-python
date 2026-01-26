@@ -174,6 +174,15 @@ impl Arena {
         })
     }
 
+    /// Reconnect to a room
+    fn reconnect(&self, room_id: &str) -> PyResult<()> {
+        self.runtime.block_on(async {
+            let guard = self.inner.lock().await;
+            let arena = guard.as_ref().ok_or_else(|| PyRuntimeError::new_err("Arena not initialized"))?;
+            arena.reconnect(room_id).await.map_err(|e| PyRuntimeError::new_err(e.to_string()))
+        })
+    }
+
     /// Send game state
     fn send_state(&self, state: &Bound<'_, PyAny>) -> PyResult<()> {
         let value: serde_json::Value = pythonize::depythonize(state)?;

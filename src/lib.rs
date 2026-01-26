@@ -2,7 +2,7 @@
 
 use nostr_arena::{
     Arena as CoreArena, ArenaConfig as CoreConfig, ArenaEvent as CoreEvent,
-    PlayerPresence, RoomInfo, RoomStatus, StartMode,
+    RoomStatus, StartMode,
 };
 use pyo3::prelude::*;
 use pyo3::exceptions::PyRuntimeError;
@@ -263,7 +263,9 @@ impl Arena {
             let guard = self.inner.lock().await;
             let arena = guard.as_ref().ok_or_else(|| PyRuntimeError::new_err("Arena not initialized"))?;
             let players = arena.players().await;
-            pythonize::pythonize(py, &players).map_err(|e| PyRuntimeError::new_err(e.to_string()))
+            pythonize::pythonize(py, &players)
+                .map(|b| b.unbind())
+                .map_err(|e| PyRuntimeError::new_err(e.to_string()))
         })
     }
 
@@ -315,7 +317,9 @@ impl Arena {
             CoreArena::<serde_json::Value>::list_rooms(game_id, relays, status_filter, limit).await
         }).map_err(|e| PyRuntimeError::new_err(e.to_string()))?;
 
-        pythonize::pythonize(py, &rooms).map_err(|e| PyRuntimeError::new_err(e.to_string()))
+        pythonize::pythonize(py, &rooms)
+            .map(|b| b.unbind())
+            .map_err(|e| PyRuntimeError::new_err(e.to_string()))
     }
 }
 
@@ -327,7 +331,7 @@ fn event_to_dict(py: Python<'_>, event: CoreEvent<serde_json::Value>) -> PyResul
     match event {
         CoreEvent::PlayerJoin(player) => {
             dict.set_item("type", "player_join")?;
-            dict.set_item("player", pythonize::pythonize(py, &player)?)?;
+            dict.set_item("player", pythonize::pythonize(py, &player)?.unbind())?;
         }
         CoreEvent::PlayerLeave(pubkey) => {
             dict.set_item("type", "player_leave")?;
@@ -336,7 +340,7 @@ fn event_to_dict(py: Python<'_>, event: CoreEvent<serde_json::Value>) -> PyResul
         CoreEvent::PlayerState { pubkey, state } => {
             dict.set_item("type", "player_state")?;
             dict.set_item("pubkey", pubkey)?;
-            dict.set_item("state", pythonize::pythonize(py, &state)?)?;
+            dict.set_item("state", pythonize::pythonize(py, &state)?.unbind())?;
         }
         CoreEvent::PlayerDisconnect(pubkey) => {
             dict.set_item("type", "player_disconnect")?;
@@ -376,7 +380,7 @@ fn event_to_dict(py: Python<'_>, event: CoreEvent<serde_json::Value>) -> PyResul
         }
     }
 
-    Ok(dict.into())
+    Ok(dict.unbind().into())
 }
 
 /// Python module

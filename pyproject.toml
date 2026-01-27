@@ -30,7 +30,14 @@ Homepage = "https://github.com/kako-jun/nostr-arena-python"
 Repository = "https://github.com/kako-jun/nostr-arena-python"
 Documentation = "https://github.com/kako-jun/nostr-arena"
 
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "pytest-cov>=4.0"]
+
 [tool.maturin]
 features = ["pyo3/extension-module"]
 python-source = "python"
 module-name = "nostr_arena._nostr_arena"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
